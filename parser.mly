@@ -8,6 +8,8 @@ open Syntax
 %token <int> NUMBER
 /* これは、数字には int 型の値が伴うことを示している */
 %token PLUS MINUS TIMES
+%token TRUE FALSE
+%token EQUAL LESS GREATER
 %token LPAREN RPAREN
 %token EOF
 /* End of File: 入力の終わりを示す */
@@ -20,6 +22,7 @@ open Syntax
 
 /* 演算子の優先順位を指定する */
 /* 下に行くほど強く結合する */
+%nonassoc EQUAL LESS GREATER
 %left PLUS MINUS
 %left TIMES
 %nonassoc UNARY
@@ -36,6 +39,10 @@ start:
 simple_expr:
 | NUMBER
         { Number ($1) }
+| TRUE
+        { Bool (true) }
+| FALSE
+        { Bool (false) }
 | LPAREN expr RPAREN
         { $2 }
 
@@ -48,5 +55,11 @@ expr:
         { Op ($1, Minus, $3) }
 | expr TIMES expr
         { Op ($1, Times, $3) }
+| expr EQUAL expr
+        { Op ($1, Equal, $3) }
+| expr LESS expr
+        { Op ($1, Less, $3) }
+| expr GREATER expr
+        { Op ($3, Less, $1) }
 | MINUS expr %prec UNARY
         { Op (Number (0), Minus, $2) }

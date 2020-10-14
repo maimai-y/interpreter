@@ -3,6 +3,11 @@ type token =
   | PLUS
   | MINUS
   | TIMES
+  | TRUE
+  | FALSE
+  | EQUAL
+  | LESS
+  | GREATER
   | LPAREN
   | RPAREN
   | EOF

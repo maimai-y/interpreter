@@ -18,6 +18,11 @@ rule token = parse
 | "+"     { PLUS }
 | "-"     { MINUS }
 | "*"     { TIMES }
+| "="     { EQUAL }
+| "<"     { LESS }
+| ">"     { GREATER }
+| "true"  { TRUE }
+| "false" { FALSE }
 | "("     { LPAREN }
 | ")"     { RPAREN }
 | digit+                        (* 数字が１個以上 *)

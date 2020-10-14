@@ -1,5 +1,5 @@
 (* op_t : ２項演算子の型 *)
-type op_t = Plus | Minus | Times
+type op_t = Plus | Minus | Times | Equal | Less
 
 (* ２項演算子を文字列にする関数 *)
 (* op_to_string : op_t -> string *)
@@ -7,15 +7,19 @@ let op_to_string op = match op with
     Plus -> " + "
   | Minus -> " - "
   | Times -> " * "
+  | Equal -> " = "
+  | Less -> " < "
 
 (* Syntax.t : プログラムを表す型 *)
 type t = Number of int
+       | Bool of bool
        | Op of t * op_t * t
 
 (* プログラムを文字列にする関数 *)
 (* Syntax.to_string : Syntax.t -> string *)
 let rec to_string exp = match exp with
     Number (n) -> string_of_int n
+  | Bool (b) -> if b then "true" else "false"
   | Op (arg1, op, arg2) ->
       "(" ^ to_string arg1
           ^ op_to_string op
