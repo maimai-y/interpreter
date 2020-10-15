@@ -34,3 +34,6 @@
 *.agdai
 
 interpreter
+parser.ml
+parser.mli
+lexer.ml
