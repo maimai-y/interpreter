@@ -14,6 +14,7 @@ let op_to_string op = match op with
 type t = Number of int
        | Bool of bool
        | Op of t * op_t * t
+       | If of t * t * t
 
 (* プログラムを文字列にする関数 *)
 (* Syntax.to_string : Syntax.t -> string *)
@@ -24,6 +25,10 @@ let rec to_string exp = match exp with
       "(" ^ to_string arg1
           ^ op_to_string op
           ^ to_string arg2 ^ ")"
+  | If (arg1, arg2, arg3) ->
+      "(if " ^ to_string arg1
+      ^ " then " ^ to_string arg2
+      ^ " else " ^ to_string arg3 ^ ")"
 
 (* プログラムをプリントする関数 *)
 (* Syntax.print : Syntax.t -> unit *)

@@ -11,6 +11,7 @@ open Syntax
 %token TRUE FALSE
 %token EQUAL LESS GREATER
 %token LPAREN RPAREN
+%token IF THEN ELSE
 %token EOF
 /* End of File: 入力の終わりを示す */
 
@@ -22,6 +23,7 @@ open Syntax
 
 /* 演算子の優先順位を指定する */
 /* 下に行くほど強く結合する */
+%nonassoc IF THEN ELSE
 %nonassoc EQUAL LESS GREATER
 %left PLUS MINUS
 %left TIMES
@@ -63,3 +65,5 @@ expr:
         { Op ($3, Less, $1) }
 | MINUS expr %prec UNARY
         { Op (Number (0), Minus, $2) }
+| IF expr THEN expr ELSE expr
+        { If ($2, $4, $6) }

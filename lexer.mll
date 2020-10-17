@@ -25,6 +25,9 @@ rule token = parse
 | "false" { FALSE }
 | "("     { LPAREN }
 | ")"     { RPAREN }
+| "if"    { IF }
+| "then"  { THEN }
+| "else"  { ELSE }
 | digit+                        (* 数字が１個以上 *)
           { NUMBER (int_of_string (Lexing.lexeme lexbuf)) }
 | eof     { EOF }               (* 入力終了 *)

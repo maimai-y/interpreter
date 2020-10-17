@@ -55,3 +55,11 @@ let rec f expr = match expr with
                               Value.to_string v1 ^ ", " ^
                               Value.to_string v2)
       end
+  | If (arg1, arg2, arg3) ->
+      let v1 = f arg1 in
+      begin match v1 with
+          VBool (true) -> f arg2
+        | VBool (false) -> f arg3
+        | _ -> failwith ("Predicate is not a boolean: " ^
+                         Value.to_string v1)
+      end
