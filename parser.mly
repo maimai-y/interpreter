@@ -7,11 +7,13 @@ open Syntax
 /* トークンの定義 */
 %token <int> NUMBER
 /* これは、数字には int 型の値が伴うことを示している */
+%token <string> VAR
 %token PLUS MINUS TIMES
 %token TRUE FALSE
 %token EQUAL LESS GREATER
 %token LPAREN RPAREN
 %token IF THEN ELSE
+%token LET IN
 %token EOF
 /* End of File: 入力の終わりを示す */
 
@@ -23,6 +25,7 @@ open Syntax
 
 /* 演算子の優先順位を指定する */
 /* 下に行くほど強く結合する */
+%nonassoc LET IN
 %nonassoc IF THEN ELSE
 %nonassoc EQUAL LESS GREATER
 %left PLUS MINUS
@@ -41,6 +44,8 @@ start:
 simple_expr:
 | NUMBER
         { Number ($1) }
+| VAR
+        { Var ($1) }
 | TRUE
         { Bool (true) }
 | FALSE
@@ -67,3 +72,5 @@ expr:
         { Op (Number (0), Minus, $2) }
 | IF expr THEN expr ELSE expr
         { If ($2, $4, $6) }
+| LET expr EQUAL expr IN expr
+        { Let ($2, $4, $6) }
