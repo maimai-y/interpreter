@@ -27,7 +27,8 @@ open Syntax
 /* 下に行くほど強く結合する */
 %nonassoc LET IN
 %nonassoc IF THEN ELSE
-%right EQUAL LESS GREATER
+%right EQUAL
+%nonassoc LESS GREATER
 %left PLUS MINUS
 %left TIMES
 %nonassoc UNARY
