@@ -2,7 +2,7 @@ open Syntax
 open Value
 
 (* 実際の計算をする関数 *)
-(* Eval.f : Syntax.t -> Value.t *)
+(* Eval.f : Syntax.t Env.t -> Value.t *)
 let rec f expr env = match expr with
     Number (n) -> VNumber (n)
   | Bool (b) -> VBool (b)
