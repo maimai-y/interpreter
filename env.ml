@@ -12,7 +12,7 @@ let rec get env var =
     | Node (left, k, v, right) ->
         if k = var then v
         else if k < var then get right var
-        else get right var
+        else get left var
 
 let rec extend env var value =
   match env with
