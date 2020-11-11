@@ -25,10 +25,9 @@ open Syntax
 
 /* 演算子の優先順位を指定する */
 /* 下に行くほど強く結合する */
-%nonassoc LET IN
-%nonassoc IF THEN ELSE
-%right EQUAL
-%nonassoc LESS GREATER
+%nonassoc THEN
+%nonassoc ELSE
+%nonassoc EQUAL LESS GREATER
 %left PLUS MINUS
 %left TIMES
 %nonassoc UNARY
