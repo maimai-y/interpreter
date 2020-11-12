@@ -16,6 +16,8 @@ type token =
   | ELSE
   | LET
   | IN
+  | FUN
+  | ARROW
   | EOF
 
 val start :

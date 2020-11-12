@@ -1,6 +1,11 @@
 %{
 (* 補助的な変数、関数、型などの定義 *)
 open Syntax
+
+(* 目的：変数列と本体の式から、入れ子になった１引数関数を作る *)
+(* create_fun : string list -> Syntax.t -> Syntax.t *)
+let create_fun variables expr =
+  List.fold_right (fun var expr -> Fun (var, expr)) variables expr
 %}
 
 /* 以降、どういうわけかコメントが C 式になることに注意 */
@@ -14,6 +19,7 @@ open Syntax
 %token LPAREN RPAREN
 %token IF THEN ELSE
 %token LET IN
+%token FUN ARROW
 %token EOF
 /* End of File: 入力の終わりを示す */
 
@@ -25,8 +31,10 @@ open Syntax
 
 /* 演算子の優先順位を指定する */
 /* 下に行くほど強く結合する */
+%nonassoc IN
 %nonassoc THEN
 %nonassoc ELSE
+%nonassoc ARROW
 %nonassoc EQUAL LESS GREATER
 %left PLUS MINUS
 %left TIMES
@@ -74,3 +82,19 @@ expr:
         { If ($2, $4, $6) }
 | LET expr EQUAL expr IN expr
         { Let ($2, $4, $6) }
+| FUN variables ARROW expr
+        { create_fun $2 $4 }
+| app
+        { $1 }
+
+variables:
+| VAR
+        { [$1] }
+| VAR variables
+        { $1 :: $2 }
+
+app:
+| simple_expr simple_expr
+        { App ($1, $2) }
+| app simple_expr
+        { App ($1, $2) }

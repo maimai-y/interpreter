@@ -75,3 +75,14 @@ let rec f expr env = match expr with
         | _ -> failwith (Syntax.to_string arg1 
                         ^ " is not an appropriate name for a variable.")
       end
+  | Fun (arg1, arg2) ->
+      VFun (arg1, arg2, env)
+
+  | App (arg1, arg2) ->
+      begin match f arg1 env with
+          VFun (x, t, env_fun) ->
+            let value = f arg2 env in
+              f t (Env.extend env_fun x value)
+        | _ -> failwith ("Not a function: "
+                        ^ Syntax.to_string arg1)
+      end
