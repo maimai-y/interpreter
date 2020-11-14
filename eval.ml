@@ -71,14 +71,23 @@ let rec f expr env = match expr with
       let value = f arg2 env in
         f arg3 (Env.extend env arg1 value)
 
+  | Letrec (arg1, arg2, arg3, arg4) ->
+      f arg4 (Env.extend env arg1 (VCloR (arg1, arg2, arg3, env)))
+
   | Fun (arg1, arg2) ->
-      VFun (arg1, arg2, env)
+      VClo (arg1, arg2, env)
 
   | App (arg1, arg2) ->
-      begin match f arg1 env with
-          VFun (x, t, env_fun) ->
-            let value = f arg2 env in
-              f t (Env.extend env_fun x value)
+      let v1 = f arg1 env in
+      begin match v1 with
+          VClo (x, t, env_fun) ->
+            let v2 = f arg2 env in
+              f t (Env.extend env_fun x v2)
+        | VCloR (g, x, t, env_fun) ->
+            let v2 = f arg2 env in
+            let new_env1 = Env.extend env_fun x v2 in
+            let new_env2 = Env.extend new_env1 g v1 in
+              f t new_env2
         | _ -> failwith ("Not a function: "
                         ^ Syntax.to_string arg1)
       end

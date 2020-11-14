@@ -82,6 +82,10 @@ expr:
         { If ($2, $4, $6) }
 | LET VAR EQUAL expr IN expr
         { Let ($2, $4, $6) }
+| LET REC VAR VAR EQUAL expr IN expr
+        { Letrec ($3, $4, $6, $8) }
+| LET REC VAR VAR variables EQUAL expr IN expr
+        { Letrec ($3, $4, (create_fun $5 $7), $9) }
 | FUN variables ARROW expr
         { create_fun $2 $4 }
 | app
