@@ -15,6 +15,7 @@ type token =
   | THEN
   | ELSE
   | LET
+  | REC
   | IN
   | FUN
   | ARROW

@@ -68,13 +68,9 @@ let rec f expr env = match expr with
                          Value.to_string v1)
       end
   | Let (arg1, arg2, arg3) ->
-      begin match arg1 with
-          Var (var) ->
-            let value = f arg2 env in
-              f arg3 (Env.extend env var value)
-        | _ -> failwith (Syntax.to_string arg1 
-                        ^ " is not an appropriate name for a variable.")
-      end
+      let value = f arg2 env in
+        f arg3 (Env.extend env arg1 value)
+
   | Fun (arg1, arg2) ->
       VFun (arg1, arg2, env)
 

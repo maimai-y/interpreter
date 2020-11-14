@@ -18,7 +18,7 @@ let create_fun variables expr =
 %token EQUAL LESS GREATER
 %token LPAREN RPAREN
 %token IF THEN ELSE
-%token LET IN
+%token LET REC IN
 %token FUN ARROW
 %token EOF
 /* End of File: 入力の終わりを示す */
@@ -80,7 +80,7 @@ expr:
         { Op (Number (0), Minus, $2) }
 | IF expr THEN expr ELSE expr
         { If ($2, $4, $6) }
-| LET expr EQUAL expr IN expr
+| LET VAR EQUAL expr IN expr
         { Let ($2, $4, $6) }
 | FUN variables ARROW expr
         { create_fun $2 $4 }
