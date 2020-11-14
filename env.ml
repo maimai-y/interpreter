@@ -20,4 +20,4 @@ let rec extend env var value =
     | Node (left, k, v, right) ->
         if k = var then Node(left, k, value, right)
         else if k < var then Node (left, k, v, (extend right var value))
-        else Node ((extend right var value), k, v, right)
+        else Node ((extend left var value), k, v, right)
