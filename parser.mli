@@ -19,6 +19,12 @@ type token =
   | IN
   | FUN
   | ARROW
+  | LBRACKET
+  | RBRACKET
+  | CONS
+  | MATCH
+  | WITH
+  | BAR
   | EOF
 
 val start :

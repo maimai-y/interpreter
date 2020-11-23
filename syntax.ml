@@ -20,6 +20,9 @@ type t = Number of int
        | Letrec of string * string * t * t
        | Fun of string * t
        | App of t * t
+       | Nil
+       | Cons of t * t
+       | Match of t * t * string * string * t
 
 (* プログラムを文字列にする関数 *)
 (* Syntax.to_string : Syntax.t -> string *)
@@ -48,6 +51,12 @@ let rec to_string exp = match exp with
       ^ " -> " ^ to_string arg2 ^ ")"
   | App (arg1, arg2) ->
       "(" ^ to_string arg1 ^ " " ^ to_string arg2 ^ ")"
+  | Nil -> "[]"
+  | Cons (arg1, arg2) ->
+      "(" ^ to_string arg1 ^ " :: " ^ to_string arg2 ^ ")"
+  | Match (arg1, arg2, arg3, arg4, arg5) ->
+      "(match " ^ to_string arg1 ^ " with [] -> " ^ to_string arg2 
+      ^ " | " ^ arg3 ^ " :: " ^ arg4 ^  " -> " ^ to_string arg5 ^ ")"
 
 (* プログラムをプリントする関数 *)
 (* Syntax.print : Syntax.t -> unit *)

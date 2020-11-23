@@ -10,6 +10,7 @@ let rec f expr env = match expr with
       begin try Env.get env var with
         Env.Not_found -> failwith ("Unbound variable: " ^ var)
       end
+  | Nil -> VList([])
   | Op (arg1, Plus, arg2) ->
       let v1 = f arg1 env in
       let v2 = f arg2 env in
@@ -89,5 +90,26 @@ let rec f expr env = match expr with
             let new_env2 = Env.extend new_env1 g v1 in
               f t new_env2
         | _ -> failwith ("Not a function: "
+                        ^ Syntax.to_string arg1)
+      end
+  | Cons (arg1, arg2) ->
+      let v1 = f arg1 env in
+      let v2 = f arg2 env in
+      begin match v2 with
+          VList (l) -> VList (v1::l)
+        | _ -> failwith ("Not a list: "
+                          ^ Syntax.to_string arg1)
+      end
+  | Match (arg1, arg2, arg3, arg4, arg5) ->
+      begin match f arg1 env with
+          VList (l) ->
+            begin match l with
+                [] -> f arg2 env
+              | first :: rest ->
+                  let new_env1 = Env.extend env arg3 first in
+                  let new_env2 = Env.extend new_env1 arg4 (VList (rest)) in
+                  f arg5 new_env2
+            end
+        | _ -> failwith ("Not a list: "
                         ^ Syntax.to_string arg1)
       end

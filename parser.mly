@@ -20,6 +20,8 @@ let create_fun variables expr =
 %token IF THEN ELSE
 %token LET REC IN
 %token FUN ARROW
+%token LBRACKET RBRACKET CONS
+%token MATCH WITH BAR
 %token EOF
 /* End of File: 入力の終わりを示す */
 
@@ -36,6 +38,7 @@ let create_fun variables expr =
 %nonassoc ELSE
 %nonassoc ARROW
 %nonassoc EQUAL LESS GREATER
+%right CONS
 %left PLUS MINUS
 %left TIMES
 %nonassoc UNARY
@@ -60,6 +63,8 @@ simple_expr:
         { Bool (false) }
 | LPAREN expr RPAREN
         { $2 }
+| LBRACKET RBRACKET
+        { Nil }
 
 expr:
 | simple_expr
@@ -90,6 +95,10 @@ expr:
         { create_fun $2 $4 }
 | app
         { $1 }
+| expr CONS expr
+        { Cons ($1, $3) }
+| MATCH expr WITH LBRACKET RBRACKET ARROW expr BAR VAR CONS VAR ARROW expr
+        { Match ($2, $7, $9, $11, $13) }
 
 variables:
 | VAR
