@@ -6,6 +6,11 @@ open Syntax
 (* create_fun : string list -> Syntax.t -> Syntax.t *)
 let create_fun variables expr =
   List.fold_right (fun var expr -> Fun (var, expr)) variables expr
+
+(* 目的：式の列から、Cons を使ったリストを作る *)
+(* create_list : Syntax.t list -> Syntax.t *)
+let create_list exprs =
+  List.fold_right (fun expr lst -> Cons (expr, lst)) exprs Nil
 %}
 
 /* 以降、どういうわけかコメントが C 式になることに注意 */
@@ -20,7 +25,7 @@ let create_fun variables expr =
 %token IF THEN ELSE
 %token LET REC IN
 %token FUN ARROW
-%token LBRACKET RBRACKET CONS
+%token LBRACKET RBRACKET CONS SEMI
 %token MATCH WITH BAR
 %token EOF
 /* End of File: 入力の終わりを示す */
@@ -65,6 +70,8 @@ simple_expr:
         { $2 }
 | LBRACKET RBRACKET
         { Nil }
+| LBRACKET expr_semi_list RBRACKET
+        { create_list $2 }
 
 expr:
 | simple_expr
@@ -111,3 +118,13 @@ app:
         { App ($1, $2) }
 | app simple_expr
         { App ($1, $2) }
+
+expr_semi_list:
+| expr opt_semi
+        { [$1] }
+| expr SEMI expr_semi_list
+        { $1 :: $3 }
+
+opt_semi:
+|       { () }
+| SEMI  { () }

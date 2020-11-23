@@ -22,6 +22,7 @@ type token =
   | LBRACKET
   | RBRACKET
   | CONS
+  | SEMI
   | MATCH
   | WITH
   | BAR

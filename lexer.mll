@@ -39,6 +39,7 @@ rule token = parse
 | "match" { MATCH }
 | "with"  { WITH }
 | "|"     { BAR }
+| ";"     { SEMI }
 | digit+                        (* 数字が１個以上 *)
           { NUMBER (int_of_string (Lexing.lexeme lexbuf)) }
 | lower (lower | upper | digit)*
