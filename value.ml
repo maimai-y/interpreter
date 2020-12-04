@@ -13,9 +13,13 @@ let rec to_string value = match value with
   | VClo (x, t, env) -> "<fun>"
   | VCloR (g, x, t, env) -> "<rec fun>"
   | VList (l) ->
-      match l with
-          [] -> "[]" 
-        | first :: rest -> to_string first ^ " :: " ^ to_string (VList (rest))
+      let rec lst_to_string lst =
+        match lst with
+            [] -> ""
+          | first :: [] -> to_string first
+          | first :: rest -> to_string first ^ "; " ^ lst_to_string rest
+      in
+      "[" ^ lst_to_string l ^ "]"
 
 (* プログラムの実行結果をプリントする関数 *)
 (* Value.print : Value.t -> unit *)
