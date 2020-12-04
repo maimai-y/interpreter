@@ -51,6 +51,9 @@ let rec f expr env cont = match expr with
             (VNumber (n1), VNumber (n2)) -> 
                 if n1 = n2 then cont (VBool (true))
                 else cont (VBool (false))
+          | (VBool (b1), VBool (b2)) -> 
+                if b1 = b2 then cont (VBool (true))
+                else cont (VBool (false))
           | (_, _) -> failwith ("Bad arguments to =: " ^
                                 Value.to_string v1 ^ ", " ^
                                 Value.to_string v2)
