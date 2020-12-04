@@ -9,7 +9,8 @@ let go () =
     print_newline ();
     print_string "Result : "
   end;
-  print_string (Value.to_string (Eval.f program Env.empty));      (* 結果を表示する *)
+  let id x = x in
+  print_string (Value.to_string (Eval.f program Env.empty id));      (* 結果を表示する *)
   print_newline ()
 
 (* スタートアップ *)
