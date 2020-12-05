@@ -96,7 +96,7 @@ let rec f expr env cont = match expr with
         begin match v2 with
             VList (l) -> cont (VList (v1::l))
           | _ -> failwith ("Not a list: "
-                            ^ Syntax.to_string arg1)
+                            ^ Value.to_string v2)
         end))
   | Match (arg1, arg2, arg3, arg4, arg5) ->
       f arg1 env (fun v1 ->
@@ -110,5 +110,5 @@ let rec f expr env cont = match expr with
                     f arg5 new_env2 (fun x -> cont x)
               end
           | _ -> failwith ("Not a list: "
-                          ^ Syntax.to_string arg1)
+                          ^ Value.to_string v1)
         end)
