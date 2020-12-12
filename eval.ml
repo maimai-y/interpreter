@@ -88,7 +88,7 @@ let rec f expr env cont = match expr with
               let new_env2 = Env.extend new_env1 g v1 in
                 f t new_env2 cont)
           | _ -> failwith ("Not a function: "
-                          ^ Syntax.to_string arg1)
+                          ^ Value.to_string v1)
         end)
   | Cons (arg1, arg2) ->
       f arg1 env (fun v1 ->
