@@ -9,8 +9,11 @@ let go () =
     print_newline ();
     print_string "Result : "
   end;
-  let id x = x in
-  print_string (Value.to_string (Eval.f program Env.empty id));      (* 結果を表示する *)
+  let str =
+    match Eval.f program Env.empty (fun v -> Eval.Ok (v)) with
+        Eval.Ok (v) -> Value.to_string v
+      | Eval.Err (n) -> "Error " ^ Value.to_string n in
+  print_string (str);      (* 結果を表示する *)
   print_newline ()
 
 (* スタートアップ *)

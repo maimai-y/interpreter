@@ -1,6 +1,8 @@
 open Syntax
 open Value
 
+type t = Ok of Value.t | Err of Value.t
+
 (* 実際の計算をする関数 *)
 (* Eval.f : Syntax.t -> (string, Value.t) Env.t -> (Value.t -> 'a) -> 'a *)
 let rec f expr env cont = match expr with
@@ -32,6 +34,15 @@ let rec f expr env cont = match expr with
         begin match (v1, v2) with
             (VNumber (n1), VNumber (n2)) -> cont (VNumber (n1 * n2))
           | (_, _) -> failwith ("Bad arguments to *: " ^
+                                Value.to_string v1 ^ ", " ^
+                                Value.to_string v2)
+        end))
+  | Op (arg1, Div, arg2) ->
+      f arg1 env (fun v1 -> f arg2 env (fun v2 ->
+        begin match (v1, v2) with
+            (VNumber (n1), VNumber (0)) -> Err (VNumber (0))
+          | (VNumber (n1), VNumber (n2)) -> cont (VNumber (n1 / n2))
+          | (_, _) -> failwith ("Bad arguments to /: " ^
                                 Value.to_string v1 ^ ", " ^
                                 Value.to_string v2)
         end))
@@ -112,3 +123,13 @@ let rec f expr env cont = match expr with
           | _ -> failwith ("Not a list: "
                           ^ Value.to_string v1)
         end)
+  | Raise (arg1) ->
+      begin match f arg1 env (fun v -> Ok (v)) with
+          Ok (n) -> Err (n)
+        | Err (n) -> Err (n)
+      end
+  | Try (arg1, arg2, arg3) ->
+      begin match f arg1 env (fun v -> Ok (v)) with
+          Ok (v) -> cont v
+        | Err (n) -> f arg3 (Env.extend env arg2 n) cont
+      end

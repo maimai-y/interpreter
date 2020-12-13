@@ -4,6 +4,7 @@ type token =
   | PLUS
   | MINUS
   | TIMES
+  | DIV
   | TRUE
   | FALSE
   | EQUAL
@@ -26,6 +27,9 @@ type token =
   | MATCH
   | WITH
   | BAR
+  | RAISE
+  | ERROR
+  | TRY
   | EOF
 
 val start :

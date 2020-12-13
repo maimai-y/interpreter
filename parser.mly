@@ -18,7 +18,7 @@ let create_list exprs =
 %token <int> NUMBER
 /* これは、数字には int 型の値が伴うことを示している */
 %token <string> VAR
-%token PLUS MINUS TIMES
+%token PLUS MINUS TIMES DIV
 %token TRUE FALSE
 %token EQUAL LESS GREATER
 %token LPAREN RPAREN
@@ -27,6 +27,7 @@ let create_list exprs =
 %token FUN ARROW
 %token LBRACKET RBRACKET CONS SEMI
 %token MATCH WITH BAR
+%token RAISE ERROR TRY
 %token EOF
 /* End of File: 入力の終わりを示す */
 
@@ -45,7 +46,7 @@ let create_list exprs =
 %nonassoc EQUAL LESS GREATER
 %right CONS
 %left PLUS MINUS
-%left TIMES
+%left TIMES DIV
 %nonassoc UNARY
 /* nonassoc は結合なし（毎回、かっこを書かなくてはならない）、
    left は左結合、right は右結合 */
@@ -82,6 +83,8 @@ expr:
         { Op ($1, Minus, $3) }
 | expr TIMES expr
         { Op ($1, Times, $3) }
+| expr DIV expr
+        { Op ($1, Div, $3) }
 | expr EQUAL expr
         { Op ($1, Equal, $3) }
 | expr LESS expr
@@ -106,6 +109,10 @@ expr:
         { Cons ($1, $3) }
 | MATCH expr WITH LBRACKET RBRACKET ARROW expr BAR VAR CONS VAR ARROW expr
         { Match ($2, $7, $9, $11, $13) }
+| RAISE LPAREN ERROR expr RPAREN
+        { Raise ($4) }
+| TRY expr WITH ERROR VAR ARROW expr
+        { Try ($2, $5, $7) }
 
 variables:
 | VAR
