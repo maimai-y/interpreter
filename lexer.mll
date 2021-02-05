@@ -40,6 +40,8 @@ rule token = parse
 | "with"  { WITH }
 | "|"     { BAR }
 | ";"     { SEMI }
+| "shift" { SHIFT }
+| "reset" { RESET }
 | digit+                        (* 数字が１個以上 *)
           { NUMBER (int_of_string (Lexing.lexeme lexbuf)) }
 | lower (lower | upper | digit)*

@@ -23,6 +23,8 @@ type token =
   | RBRACKET
   | CONS
   | SEMI
+  | SHIFT
+  | RESET
   | MATCH
   | WITH
   | BAR

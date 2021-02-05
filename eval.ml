@@ -87,6 +87,9 @@ let rec f expr env cont = match expr with
               let new_env1 = Env.extend env_fun x v2 in
               let new_env2 = Env.extend new_env1 g v1 in
                 f t new_env2 cont)
+          | VCont (c) ->
+              f arg2 env (fun v2 ->
+                cont (c v2))
           | _ -> failwith ("Not a function: "
                           ^ Value.to_string v1)
         end)
@@ -112,3 +115,8 @@ let rec f expr env cont = match expr with
           | _ -> failwith ("Not a list: "
                           ^ Value.to_string v1)
         end)
+  | Shift (arg1, arg2) ->
+      let new_env = Env.extend env arg1 (VCont (cont)) in
+      f arg2 new_env (fun x -> x)
+  | Reset (arg) ->
+      cont (f arg env (fun x -> x))

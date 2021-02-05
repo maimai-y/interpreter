@@ -26,6 +26,7 @@ let create_list exprs =
 %token LET REC IN
 %token FUN ARROW
 %token LBRACKET RBRACKET CONS SEMI
+%token SHIFT RESET
 %token MATCH WITH BAR
 %token EOF
 /* End of File: 入力の終わりを示す */
@@ -106,6 +107,10 @@ expr:
         { Cons ($1, $3) }
 | MATCH expr WITH LBRACKET RBRACKET ARROW expr BAR VAR CONS VAR ARROW expr
         { Match ($2, $7, $9, $11, $13) }
+| SHIFT LPAREN FUN VAR ARROW expr RPAREN
+        { Shift ($4, $6) }
+| RESET LPAREN FUN LPAREN RPAREN ARROW expr RPAREN
+        { Reset ($7) }
 
 variables:
 | VAR

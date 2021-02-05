@@ -23,6 +23,8 @@ type t = Number of int
        | Nil
        | Cons of t * t
        | Match of t * t * string * string * t
+       | Shift of string * t
+       | Reset of t
 
 (* プログラムを文字列にする関数 *)
 (* Syntax.to_string : Syntax.t -> string *)
@@ -57,6 +59,10 @@ let rec to_string exp = match exp with
   | Match (arg1, arg2, arg3, arg4, arg5) ->
       "(match " ^ to_string arg1 ^ " with [] -> " ^ to_string arg2 
       ^ " | " ^ arg3 ^ " :: " ^ arg4 ^  " -> " ^ to_string arg5 ^ ")"
+  | Shift (arg1, arg2) ->
+      "(shift (fun " ^ arg1 ^ " -> " ^ to_string arg2 ^ ")"
+  | Reset (arg) ->
+      "(reset (fun () -> " ^ to_string arg ^ ")"
 
 (* プログラムをプリントする関数 *)
 (* Syntax.print : Syntax.t -> unit *)

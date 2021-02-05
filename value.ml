@@ -4,6 +4,7 @@ type t = VNumber of int
        | VClo of string * Syntax.t * (string, t) Env.t
        | VCloR of string * string * Syntax.t * (string, t) Env.t
        | VList of t list
+       | VCont of (t -> t)
 
 (* プログラムの実行結果を文字列にする関数 *)
 (* Value.to_string : Value.t -> string *)
@@ -20,6 +21,7 @@ let rec to_string value = match value with
           | first :: rest -> to_string first ^ "; " ^ lst_to_string rest
       in
       "[" ^ lst_to_string l ^ "]"
+  | VCont (c) -> "<fun>"
 
 (* プログラムの実行結果をプリントする関数 *)
 (* Value.print : Value.t -> unit *)
