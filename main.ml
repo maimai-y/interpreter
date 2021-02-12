@@ -7,6 +7,10 @@ let go () =
     print_string "Parsed : ";
     Syntax.print program;               (* 入力を表示する *)
     print_newline ();
+    let ty = Typing.f program in        (* 型チェックをして *)
+    print_string "Type : ";
+    Type.print ty;                      (* 型を表示する *)
+    print_newline ();
     print_string "Result : "
   end;
   let str =
