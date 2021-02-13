@@ -29,6 +29,13 @@ let rec unify ty1 ty2 = match (ty1, ty2) with
       end
   | (Type.Tlist (ty1), Type.Tlist (ty2)) ->
       unify ty1 ty2
+  (* この下の2行は必要。例えば
+      TVar(r1←中身None),TVar(r2)だった時、
+      ty1がTVar(r1←中身Some(TVar(r2)))になってしまい、例えば
+      TVar(r2←中身None),TVar(r1←中身Some(TVar(r2)))が来た時、raiseする
+      例：let rec f x = f (x - 1) in f 1 + 2 *)
+  | (Type.TVar ({ contents = Some(ty1') }), _) -> unify ty1' ty2
+  | (_, Type.TVar ({ contents = Some(ty2') })) -> unify ty1 ty2'
   | (Type.TVar (r1), Type.TVar (r2)) when r1 == r2 -> ()
   | (Type.TVar (r1), _) ->
       begin match !r1 with
